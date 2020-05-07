@@ -16,17 +16,16 @@ import (
 func TestRssReader_Parse_SuccessFailAndTimeout(t *testing.T) {
 	successResponse1 := `<rss version="2.0">
 	<channel>
+	<title>Feed Test Title 1</title>
 	<link>http://test_feed_link</link>
 	<item>
 	<title>Test Title 1</title>
-	<content:encoded>Test Content 1</content:encoded>
 	<link>http://test_link1</link>
 	<pubDate>Sun, 03 May 2020 22:25:48 PDT</pubDate>
 	<description>Test Description 1</description>
 	</item>
 	<item>
 	<title>Test Title 2</title>
-	<content:encoded>Test Content 2</content:encoded>
 	<link>http://test_link2</link>
 	<pubDate>Sun, 02 May 2020 11:25:48 PDT</pubDate>
 	<description>Test Description 2</description>
@@ -35,10 +34,10 @@ func TestRssReader_Parse_SuccessFailAndTimeout(t *testing.T) {
 	</rss>`
 	successResponse2 := `<rss version="2.0">
 	<channel>
+	<title>Feed Test Title 2</title>
 	<link>http://test_feed_link</link>
 	<item>
 	<title>Test Title 3</title>
-	<content:encoded>Test Content 3</content:encoded>
 	<link>http://test_link3</link>
 	<pubDate>Sun, 13 May 2020 22:25:48 PDT</pubDate>
 	<description>Test Description 3</description>
@@ -68,8 +67,9 @@ func TestRssReader_Parse_SuccessFailAndTimeout(t *testing.T) {
 	assert.NotNil(t, err)
 
 	assert.True(t, strings.Contains(posts[0].Title, "Test Title"))
-	assert.True(t, strings.Contains(posts[0].SourceURL, "http://test_link"))
-	assert.True(t, strings.Contains(posts[0].Link, "http://test_feed_link"))
+	assert.True(t, strings.Contains(posts[0].Source, "Feed Test Title"))
+	assert.True(t, strings.Contains(posts[0].SourceURL, "http://test_feed_link"))
+	assert.True(t, strings.Contains(posts[0].Link, "http://test_link"))
 	assert.True(t, strings.Contains(posts[0].Description, "Test Description"))
 	assert.True(t, strings.Contains(posts[0].PublishDate.String(), "2020-05"))
 

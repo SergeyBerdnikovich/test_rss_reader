@@ -3,7 +3,6 @@ package rssreader
 import (
 	"context"
 	"strings"
-	"time"
 
 	"github.com/mmcdole/gofeed"
 	"github.com/pkg/errors"
@@ -63,19 +62,12 @@ func parseFeedItems(feed gofeed.Feed) []RssItem {
 	items := make([]RssItem, 0, len(feed.Items))
 
 	for _, item := range feed.Items {
-		var publishDate time.Time
-		if item.PublishedParsed == nil {
-			publishDate = time.Now().UTC()
-		} else {
-			publishDate = *item.PublishedParsed
-		}
-
 		items = append(items, RssItem{
 			Title:       item.Title,
-			Source:      item.Content,
-			SourceURL:   item.Link,
-			Link:        feed.Link,
-			PublishDate: publishDate,
+			Source:      feed.Title,
+			SourceURL:   feed.Link,
+			Link:        item.Link,
+			PublishDate: item.PublishedParsed,
 			Description: item.Description,
 		})
 	}
